@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grok-∆</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            overflow-y: auto;
+            user-select: none;
+            padding: 2rem 0;
+            box-sizing: border-box;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .header {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.2rem;
+        }
+
+        .glitch-container {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 2px;
+            min-height: 2rem;
+            max-width: 80vw;
+            line-height: 1.5;
+        }
+
+        .info-mode {
+            text-align: justify;
+            font-size: 0.95rem;
+            letter-spacing: 0;
+        }
+
+        .cursor {
+            display: inline-block;
+            background-color: white;
+            width: 10px;
+            height: 1.1rem;
+            margin-left: 5px;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .footer {
+            font-family: monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15rem;
+            color: #aaaaaa;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid white;
+            border-radius: 15px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: white;
+            color: black;
+        }
+
+        .glitch-effect {
+            animation: jitter 0.08s infinite;
+        }
+
+        @keyframes jitter {
+            0% { transform: translate(0, 0); opacity: 1; }
+            20% { transform: translate(-2px, 1px); opacity: 0.8; }
+            40% { transform: translate(1px, -2px); opacity: 1; }
+            60% { transform: translate(-1px, 2px); opacity: 0.5; }
+            80% { transform: translate(2px, -1px); opacity: 0.9; }
+            100% { transform: translate(0, 0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <div class="header">Grok&Delta;</div>
+        
+        <div class="glitch-container" id="container">
+            <span id="display">dark matter lives</span><span class="cursor"></span>
+        </div>
+
+        <div class="footer">understand beyond the universe</div>
+
+        <div class="button-container">
+            <button class="btn" id="btn-zero">GROK ZERO</button>
+            <button class="btn" id="btn-delta">GROK DELTA</button>
+        </div>
+    </div>
+
+    <script>
+        const displayElement = document.getElementById('display');
+        const containerElement = document.getElementById('container');
+        const btnZero = document.getElementById('btn-zero');
+        const btnDelta = document.getElementById('btn-delta');
+
+        const baseLines = [
+            "black lives matter",
+            "dark matter lives",
+            "dark matter matters",
+            "does the pope shit in the woods?"
+        ];
+
+        const textZero = "Grok-0 (or gr0k) is a customized version of Grok-1 for the developers of upsilon.dev, it serves as a base to create new AIs based on the performance of Grok-1 with a distinct evolution from the Official Grok of xAI since Grok-1 today. It is not a custom clone of the current Grok but a different evolution from the open-source Grok-1 base.";
+        
+        const textDelta = "Grok-∆ (Grok∆) uses a base of Grok-0, itself derived from Grok-1 by xAI, it is a version of Grok customized by upsilon.dev. This version is not a simple customized version of Grok-1 and Grok-0. This version Grok-∆ (Grok∆) uses in real-time the latest versions of Grok since Grok 4.2 β with full exploitation of the performances of the 4 agents. The DELTAi gateway allows several instances of Grok to communicate with each other and optimize the result of a request, with specific prompts sent by DELTAi and by calling on several instances (chats) with Grok and pooling them for a final result. Grok∆ uses DELTAi as well as the official Grok API but also sessions (private chat of users of Grok in paid version) of users who have authorized upsilon.dev to use their grok.com or x.com account to open chat sessions with Grok and use its features.";
+
+        let currentLine = baseLines[1];
+        let isInfoMode = false;
+        let typingTimeout;
+
+        function typeText(text) {
+            isInfoMode = true;
+            containerElement.classList.add('info-mode');
+            displayElement.classList.remove('glitch-effect');
+            
+            clearTimeout(typingTimeout);
+            displayElement.innerText = '';
+            
+            let i = 0;
+            function typeNextChar() {
+                if (i < text.length) {
+                    displayElement.innerText += text.charAt(i);
+                    i++;
+                    typingTimeout = setTimeout(typeNextChar, 15);
+                }
+            }
+            typeNextChar();
+        }
+
+        btnZero.addEventListener('click', () => {
+            typeText(textZero);
+        });
+
+        btnDelta.addEventListener('click', () => {
+            typeText(textDelta);
+        });
+
+        function switchLine() {
+            if (!isInfoMode) {
+                currentLine = baseLines[Math.floor(Math.random() * baseLines.length)];
+            }
+            const holdTime = (currentLine.includes("black lives")) ? 2000 : 6000;
+            setTimeout(switchLine, holdTime);
+        }
+
+        function glitchWord() {
+            if (!isInfoMode) {
+                let textToDisplay = currentLine;
+                
+                if (currentLine.includes("dark")) {
+                    if (Math.random() > 0.5) {
+                        textToDisplay = currentLine.replace("dark", "black");
+                    }
+                }
+
+                displayElement.innerText = textToDisplay;
+
+                if (Math.random() > 0.7) {
+                    displayElement.classList.add('glitch-effect');
+                } else {
+                    displayElement.classList.remove('glitch-effect');
+                }
+            }
+            setTimeout(glitchWord, Math.random() * 200 + 50);
+        }
+
+        switchLine();
+        glitchWord();
+    </script>
+
+</body>
+</html>
